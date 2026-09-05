@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>NEXUS</title>
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="NEXUS" />
+  <link rel="icon" href="icon.svg" />
+  <style>
+    :root { --g:#00ff87; --c:#60efff; --p:#ff0080; --y:#ffcc00; --bg:#0a0a0f; --ink:#d7ffe9; --dim:#7eaa98; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; }
+    body { min-height: 100dvh; }
+    main { max-width: 720px; margin: 0 auto; padding: 28px 18px 64px; }
+    header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 1px solid #00ff8733; padding-bottom: 20px; margin-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(40px, 10vw, 72px); letter-spacing: -0.04em; color: var(--g); line-height: .9; text-shadow: 0 0 18px #00ff8766; }
+    .sub { margin: 10px 0 0; color: var(--c); font-size: 15px; font-weight: 600; }
+    .op { margin: 6px 0 0; color: var(--dim); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+    .plate { border: 1px solid #00ff8733; background: #10141c; border-radius: 12px; padding: 16px 16px 8px; margin-bottom: 14px; }
+    .row { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid #00ff8718; font-size: 14px; }
+    .row:last-child { border-bottom: 0; }
+    .k { color: var(--y); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding-top: 3px; }
+    .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sw { width: calc(50% - 4px); min-width: 140px; border: 1px solid #ffffff14; border-radius: 8px; overflow: hidden; cursor: pointer; }
+    .sw b { display: block; height: 36px; }
+    .sw span { display: block; padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; color: #b7e8d3; }
+    button { appearance: none; border: 0; border-radius: 8px; padding: 10px 12px; font-weight: 800; cursor: pointer; }
+    .act { background: var(--g); color: #04140c; }
+    .ghost { background: transparent; border: 1px solid #ff008066; color: #ff8ac4; }
+    .bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    #msg { min-height: 18px; font-size: 12px; color: var(--c); margin-top: 8px; }
+    footer { margin-top: 28px; color: #56786c; font-size: 11px; }
+  </style>
+</head>
+<body>
+<main>
+  <header class="nexus-stamp" data-brand="NExtended Xperimental USers">
+    <div>
+      <h1>NEXUS</h1>
+      <p class="sub">NExtended Xperimental USers</p>
+      <p class="op">DoubleA · AntManThePro</p>
+    </div>
+    <svg width="72" height="72" viewBox="0 0 64 64" aria-label="NEXUS">
+      <rect width="64" height="64" rx="12" fill="#0a0a0f" stroke="#00ff87" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="18" fill="none" stroke="#60efff" stroke-width="1.4"/>
+      <path d="M20 44 L32 16 L44 44 M26 33 H38" fill="none" stroke="#00ff87" stroke-width="2.6" stroke-linecap="square"/>
+      <circle cx="32" cy="33" r="2.6" fill="#ff0080"/>
+    </svg>
+  </header>
+  <section class="plate">
+    <div class="row"><div class="k">Does</div><div>Live systems. Hardware crossed with software. Field QA that has to survive contact.</div></div>
+    <div class="row"><div class="k">Operator</div><div>DoubleA @ AntManThePro</div></div>
+    <div class="row"><div class="k">Alias</div><div>NEXperimental USers — chrome only, never the headline</div></div>
+    <div class="row"><div class="k">Voice</div><div>Short. Specific. No pitch-deck poetry.</div></div>
+  </section>
+  <section class="plate">
+    <div class="row" style="grid-template-columns:1fr">
+      <div>
+        <div class="k" style="margin-bottom:8px">Palette — tap to copy</div>
+        <div class="swatches" id="sw"></div>
+      </div>
+    </div>
+  </section>
+  <section class="plate">
+    <div class="row"><div class="k">Header</div><div>NEXUS / NExtended Xperimental USers / DoubleA · AntManThePro / sigil. That is the whole stamp.</div></div>
+    <div class="row"><div class="k">Don't</div><div>Rewrite the name. Don't add a speech under the logo.</div></div>
+  </section>
+  <div class="bar">
+    <button class="act" id="copy">COPY SPEC</button>
+    <button class="ghost" id="svg">COPY SIGIL SVG</button>
+  </div>
+  <div id="msg"></div>
+  <footer>NEXUS brand kit</footer>
+</main>
+<script>
+const COLORS = [["#00ff87","green"],["#60efff","cyan"],["#ff0080","pink"],["#ffcc00","yellow"],["#0a0a0f","bg"]];
+const spec = {wordmark:"NEXUS",expansion:"NExtended Xperimental USers",alias:"NEXperimental USers",operator:"DoubleA @ AntManThePro",colors:Object.fromEntries(COLORS.map(([h,n])=>[n,h]))};
+const sw = document.getElementById("sw");
+const msg = document.getElementById("msg");
+function say(t){ msg.textContent = t; }
+COLORS.forEach(([h,n]) => {
+  const el = document.createElement("div");
+  el.className = "sw";
+  el.innerHTML = "<b style=\"background:"+h+\"></b><span>"+n+"  "+h+"</span>";
+  el.onclick = async () => { try { await navigator.clipboard.writeText(h); say(h+" copied"); } catch { say(h); } };
+  sw.appendChild(el);
+});
+document.getElementById("copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(JSON.stringify(spec,null,2)); say("spec copied"); }
+  catch { say("select and copy"); }
+};
+const SIGIL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0a0a0f" stroke="#00ff87" stroke-width="1.5"/><circle cx="32" cy="32" r="18" fill="none" stroke="#60efff" stroke-width="1.4"/><path d="M20 44 L32 16 L44 44 M26 33 H38" fill="none" stroke="#00ff87" stroke-width="2.6" stroke-linecap="square"/><circle cx="32" cy="33" r="2.6" fill="#ff0080"/></svg>';
+document.getElementById("svg").onclick = async () => {
+  try { await navigator.clipboard.writeText(SIGIL); say("sigil svg copied"); }
+  catch { say("copy failed"); }
+};
+</script>
+</body>
+</html>
